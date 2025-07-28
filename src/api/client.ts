@@ -140,6 +140,7 @@ export class ApiClient {
 
     if (this.config.verbose) {
       console.log(`[executeMultiple][url] ${url}`);
+      console.log(`[executeMultiple][msgs] ${JSON.stringify(formattedRequests)}`);
       console.log(`[executeMultiple][urlEncodedData] ${urlEncodedData.toString()}`);
     }
 
