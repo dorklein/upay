@@ -9,6 +9,7 @@ interface ApiConfig {
   baseUrl: string;
   liveSystem: boolean;
   language: "HE";
+  verbose: boolean;
 }
 
 export class ApiClient {
@@ -137,6 +138,11 @@ export class ApiClient {
     const urlEncodedData = new URLSearchParams();
     urlEncodedData.append("msgs", JSON.stringify(formattedRequests));
 
+    if (this.config.verbose) {
+      console.log(`[executeMultiple][url] ${url}`);
+      console.log(`[executeMultiple][urlEncodedData] ${urlEncodedData.toString()}`);
+    }
+
     return ResultAsync.fromPromise(this.axios.post<ApiResponse[]>(url, urlEncodedData), (error) => {
       if (axios.isAxiosError(error)) {
         return new Error(`Multiple API requests failed: ${error.message}`);
@@ -150,10 +156,12 @@ export function createApiClient(config?: {
   demo?: boolean;
   liveSystem?: boolean;
   language?: "HE";
+  verbose?: boolean;
 }): ApiClient {
   return new ApiClient({
     baseUrl: getUpayApiBaseUrl(config?.demo ?? true),
     liveSystem: config?.liveSystem ?? false,
     language: config?.language ?? "HE",
+    verbose: config?.verbose ?? false,
   });
 }
