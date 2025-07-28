@@ -32,7 +32,7 @@ export class ApiClient {
   private createHeaders(): HeaderSchema {
     return {
       sessionId: this.mainSessionId,
-      refererName: "UPAY",
+      refername: "UPAY",
       liveSystem: this.config.liveSystem ? 1 : 0,
       language: this.config.language,
     };
@@ -69,7 +69,7 @@ export class ApiClient {
     const request: RequestInterface & { parameters: object } = {
       mainAction,
       minorAction,
-      encoding: encoding ?? "json",
+      encoding,
       ...(numberTemplate && { numberTemplate }),
       parameters: parameters ?? {},
     };

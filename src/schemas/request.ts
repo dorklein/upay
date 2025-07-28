@@ -8,7 +8,7 @@ export type RequestInterface<
   mainAction: Main;
   minorAction: Minor;
   parameters?: Parameters | undefined;
-  encoding?: "json" | undefined;
+  encoding: "json";
   numberTemplate?: string | undefined;
 };
 
@@ -21,8 +21,7 @@ export function createRequest<
   mainAction: Main;
   minorAction: Minor;
   parameters?: Parameters | undefined;
-  encoding?: "json" | undefined;
   numberTemplate?: string | undefined;
 }): RequestInterface<Main, Minor, Parameters> {
-  return request;
+  return { ...request, encoding: "json" };
 }

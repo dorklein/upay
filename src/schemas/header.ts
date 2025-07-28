@@ -3,7 +3,7 @@ import { NumberBoolean } from "./common";
 
 export const HeaderSchema = v.object({
   sessionId: v.optional(v.string()),
-  refererName: v.literal("UPAY"),
+  refername: v.literal("UPAY"),
   liveSystem: NumberBoolean,
   language: v.picklist(["HE"] as const),
 });
