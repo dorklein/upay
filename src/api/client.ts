@@ -42,8 +42,8 @@ export class ApiClient {
 
   getSession(): ResultAsync<ApiResponse, Error> {
     const request: RequestInterface & { parameters: object } = {
-      mainAction: "SESSION",
-      minorAction: "GETSESSION",
+      mainaction: "SESSION",
+      minoraction: "GETSESSION",
       encoding: "json",
       parameters: {},
     };
@@ -62,21 +62,21 @@ export class ApiClient {
   }
 
   execute<M extends MainAction, A extends ActionsByMain<M>>({
-    mainAction,
-    minorAction,
+    mainaction,
+    minoraction,
     encoding,
     numberTemplate,
     parameters,
   }: RequestInterface<M, A>): ResultAsync<ApiResponse, Error> {
     const request: RequestInterface & { parameters: object } = {
-      mainAction,
-      minorAction,
+      mainaction,
+      minoraction,
       encoding,
       ...(numberTemplate && { numberTemplate }),
       parameters: parameters ?? {},
     };
 
-    const secure = isClientSecureAction(mainAction);
+    const secure = isClientSecureAction(mainaction);
 
     return this.sendRequest(secure, {
       header: this.createHeaders(),
@@ -107,8 +107,8 @@ export class ApiClient {
       return error instanceof Error ? error : new Error(String(error));
     }).map((response) => {
       if (
-        response.data?.result?.mainAction === "SESSION" &&
-        response.data?.result?.minorAction === "LOGOUT"
+        response.data?.result?.mainaction === "SESSION" &&
+        response.data?.result?.minoraction === "LOGOUT"
       ) {
         this.mainSessionId = response.data.result.sessionId ?? "";
       }
@@ -128,15 +128,15 @@ export class ApiClient {
     const formattedRequests = requests.map((req) => ({
       header: this.createHeaders(),
       request: {
-        mainAction: req.mainAction,
-        minorAction: req.minorAction,
+        mainaction: req.mainaction,
+        minoraction: req.minoraction,
         encoding: req.encoding,
         numberTemplate: req.numberTemplate,
         parameters: req.parameters || {},
       },
     }));
 
-    const url = this.getBaseUrl(isClientSecureAction(requests[0]?.mainAction));
+    const url = this.getBaseUrl(isClientSecureAction(requests[0]?.mainaction));
     const urlEncodedData = new URLSearchParams();
     urlEncodedData.append("msgs", JSON.stringify(formattedRequests));
 

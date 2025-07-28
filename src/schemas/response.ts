@@ -11,8 +11,8 @@ export type ResponseHeaderSchema = v.InferOutput<typeof ResponseHeaderSchema>;
 
 export const BaseResultSchema = v.object({
   sessionId: v.string(),
-  mainAction: v.optional(v.string()),
-  minorAction: v.optional(v.string()),
+  mainaction: v.optional(v.string()),
+  minoraction: v.optional(v.string()),
 });
 export type BaseResultSchema = v.InferOutput<typeof BaseResultSchema>;
 

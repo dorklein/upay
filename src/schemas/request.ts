@@ -5,8 +5,8 @@ export type RequestInterface<
   Minor extends ActionsByMain<Main> = ActionsByMain<Main>,
   Parameters extends ParameterByMinor<Minor> = ParameterByMinor<Minor>
 > = {
-  mainAction: Main;
-  minorAction: Minor;
+  mainaction: Main;
+  minoraction: Minor;
   parameters?: Parameters | undefined;
   encoding: "json";
   numberTemplate?: string | undefined;
@@ -18,8 +18,8 @@ export function createRequest<
   Minor extends ActionsByMain<Main>,
   Parameters extends ParameterByMinor<Minor>
 >(request: {
-  mainAction: Main;
-  minorAction: Minor;
+  mainaction: Main;
+  minoraction: Minor;
   parameters?: Parameters | undefined;
   numberTemplate?: string | undefined;
 }): RequestInterface<Main, Minor, Parameters> {
