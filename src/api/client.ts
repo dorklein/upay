@@ -157,31 +157,3 @@ export function createApiClient(config?: {
     language: config?.language ?? "HE",
   });
 }
-
-const client = createApiClient();
-
-await client.execute(
-  createRequest({
-    mainAction: "CASHIER",
-    minorAction: "REDIRECTDEPOSITCREDITCARDTRANSFER",
-    parameters: {
-      transfers: [],
-    },
-  })
-); // Error!
-
-const actions = [
-  createRequest({
-    mainAction: "SESSION",
-    minorAction: "GETSESSION",
-  }),
-  createRequest({
-    mainAction: "CASHIER",
-    minorAction: "REDIRECTDEPOSITCREDITCARDTRANSFER",
-    parameters: {
-      transfers: [],
-    },
-  }),
-];
-
-await client.executeMultiple(actions);
