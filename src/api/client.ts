@@ -31,9 +31,11 @@ export class ApiClient {
 
   private createHeaders(): HeaderSchema {
     return {
-      sessionId: this.mainSessionId,
+      ...(this.mainSessionId?.trim() && {
+        sessionId: this.mainSessionId,
+      }),
       refername: "UPAY",
-      liveSystem: this.config.liveSystem ? 1 : 0,
+      livesystem: this.config.liveSystem ? 1 : 0,
       language: this.config.language,
     };
   }

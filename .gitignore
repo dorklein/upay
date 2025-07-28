@@ -156,3 +156,5 @@ coverage/
 *.tgz
 *.tar.gz
 .cache/ 
+
+tests/manual.test.ts
