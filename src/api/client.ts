@@ -1,10 +1,10 @@
-import axios from "axios";
 import { ResultAsync } from "neverthrow";
 import type { HeaderSchema } from "../schemas/header";
 import { createRequest, type RequestInterface } from "../schemas/request";
 import { type ActionsByMain, type MainAction, isClientSecureAction } from "../schemas/enums";
 import type { ApiResponse } from "../schemas/response";
 import { getUpayApiBaseUrl } from "../constants";
+
 interface ApiConfig {
   baseUrl: string;
   liveSystem: boolean;
@@ -13,12 +13,10 @@ interface ApiConfig {
 }
 
 export class ApiClient {
-  private readonly axios = axios.create({
-    timeout: 60000,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+  private readonly timeout = 60000;
+  private readonly defaultHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
   private mainSessionId = "";
 
   constructor(private readonly config: ApiConfig) {}
@@ -38,6 +36,27 @@ export class ApiClient {
       livesystem: this.config.liveSystem ? 1 : 0,
       language: this.config.language,
     };
+  }
+
+  private async fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          ...this.defaultHeaders,
+          ...options.headers,
+        },
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
   }
 
   getSession(): ResultAsync<ApiResponse, Error> {
@@ -100,20 +119,31 @@ export class ApiClient {
     const urlEncodedData = new URLSearchParams();
     urlEncodedData.append("msg", JSON.stringify(payload));
 
-    return ResultAsync.fromPromise(this.axios.post<ApiResponse>(url, urlEncodedData), (error) => {
-      if (axios.isAxiosError(error)) {
-        return new Error(`API request failed: ${error.message}`);
+    return ResultAsync.fromPromise(
+      this.fetchWithTimeout(url, {
+        method: "POST",
+        body: urlEncodedData,
+      }).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json() as Promise<ApiResponse>;
+      }),
+      (error) => {
+        if (error instanceof Error) {
+          if (error.name === "AbortError") {
+            return new Error(`API request timed out after ${this.timeout}ms`);
+          }
+          return new Error(`API request failed: ${error.message}`);
+        }
+        return new Error(String(error));
       }
-      return error instanceof Error ? error : new Error(String(error));
-    }).map((response) => {
-      if (
-        response.data?.result?.mainaction === "SESSION" &&
-        response.data?.result?.minoraction === "LOGOUT"
-      ) {
-        this.mainSessionId = response.data.result.sessionId ?? "";
+    ).map((data) => {
+      if (data?.result?.mainaction === "SESSION" && data?.result?.minoraction === "LOGOUT") {
+        this.mainSessionId = data.result.sessionId ?? "";
       }
 
-      return response.data;
+      return data;
     });
   }
 
@@ -146,12 +176,26 @@ export class ApiClient {
       console.log(`[executeMultiple][urlEncodedData] ${urlEncodedData.toString()}`);
     }
 
-    return ResultAsync.fromPromise(this.axios.post<ApiResponse[]>(url, urlEncodedData), (error) => {
-      if (axios.isAxiosError(error)) {
-        return new Error(`Multiple API requests failed: ${error.message}`);
+    return ResultAsync.fromPromise(
+      this.fetchWithTimeout(url, {
+        method: "POST",
+        body: urlEncodedData,
+      }).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json() as Promise<ApiResponse[]>;
+      }),
+      (error) => {
+        if (error instanceof Error) {
+          if (error.name === "AbortError") {
+            return new Error(`Multiple API requests timed out after ${this.timeout}ms`);
+          }
+          return new Error(`Multiple API requests failed: ${error.message}`);
+        }
+        return new Error(String(error));
       }
-      return error instanceof Error ? error : new Error(String(error));
-    }).map((response) => response.data);
+    ).map((data) => data);
   }
 }
 
