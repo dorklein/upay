@@ -1,0 +1,7 @@
+{
+	"dependencies": {
+		"@valibot/valibot": "npm:@jsr/valibot__valibot@^1.1.0",
+		"axios": "^1.11.0",
+		"neverthrow": "^8.2.0"
+	}
+}
