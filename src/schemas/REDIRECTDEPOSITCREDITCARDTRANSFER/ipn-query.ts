@@ -33,7 +33,7 @@ export const UpayIpnQuery_REDIRECTDEPOSITCREDITCARDTRANSFER = v.object({
   email: v.string(),
   emailnotify: v.string(),
   actiondate: v.string(),
-  creditcardkey: v.optional(v.string()),
+  token: v.optional(v.string()),
 });
 export type UpayIpnQuery_REDIRECTDEPOSITCREDITCARDTRANSFER = v.InferOutput<
   typeof UpayIpnQuery_REDIRECTDEPOSITCREDITCARDTRANSFER
