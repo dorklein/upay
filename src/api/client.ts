@@ -2,7 +2,7 @@ import { ResultAsync } from "neverthrow";
 import type { HeaderSchema } from "../schemas/header";
 import { createRequest, type RequestInterface } from "../schemas/request";
 import { type ActionsByMain, type MainAction, isClientSecureAction } from "../schemas/enums";
-import type { ApiResponse } from "../schemas/response";
+import type { ApiResponse, MultiApiResponse } from "../schemas/response";
 import { getUpayApiBaseUrl } from "../constants";
 
 interface ApiConfig {
@@ -139,15 +139,15 @@ export class ApiClient {
         return new Error(String(error));
       }
     ).map((data) => {
-      if (data?.result?.mainaction === "SESSION" && data?.result?.minoraction === "LOGOUT") {
-        this.mainSessionId = data.result.sessionId ?? "";
+      if (data?.result?.sessionId) {
+        this.mainSessionId = data.result.sessionId;
       }
 
       return data;
     });
   }
 
-  executeMultiple(requests: Array<RequestInterface>): ResultAsync<ApiResponse[], Error> {
+  executeMultiple(requests: Array<RequestInterface>): ResultAsync<MultiApiResponse, Error> {
     if (!requests.length) {
       return ResultAsync.fromPromise(
         Promise.reject(new Error("At least one request is required")),
@@ -184,7 +184,7 @@ export class ApiClient {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json() as Promise<ApiResponse[]>;
+        return response.json() as Promise<MultiApiResponse>;
       }),
       (error) => {
         if (error instanceof Error) {

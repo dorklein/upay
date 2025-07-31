@@ -11,12 +11,15 @@ export type ResponseHeaderSchema = v.InferOutput<typeof ResponseHeaderSchema>;
 
 export const BaseResultSchema = v.object({
   sessionId: v.string(),
-  mainaction: v.optional(v.string()),
-  minoraction: v.optional(v.string()),
 });
 export type BaseResultSchema = v.InferOutput<typeof BaseResultSchema>;
 
 export interface ApiResponse<T = unknown> {
-  result: T & BaseResultSchema;
+  success: boolean;
   header: ResponseHeaderSchema;
+  result: T & BaseResultSchema;
 }
+
+export type MultiApiResponse<T = unknown> = {
+  results: ApiResponse<T>[];
+};

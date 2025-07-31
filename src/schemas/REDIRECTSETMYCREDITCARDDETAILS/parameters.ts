@@ -27,3 +27,11 @@ export const Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters = v.pipe(
 export type Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters = v.InferOutput<
   typeof Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters
 >;
+
+export const Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult = v.object({
+  url: v.string(),
+  sessionId: v.string(),
+});
+export type Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult = v.InferOutput<
+  typeof Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult
+>;
