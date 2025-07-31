@@ -5,6 +5,7 @@ import * as v from "@valibot/valibot";
 
 export const UpayIpnQuery_REDIRECTSETMYCREDITCARDDETAILS = v.object({
   providererrorcode: v.string(),
+  token: v.string(),
   creditcardkey: v.string(),
   cardownername: v.string(),
   identitynumber: v.string(),
