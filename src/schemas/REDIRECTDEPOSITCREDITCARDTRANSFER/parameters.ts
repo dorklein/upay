@@ -58,11 +58,13 @@ export type Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters = v.InferOutput<
 >;
 
 export const Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult = v.object({
-  transactions: v.object({
-    cashierid: v.number(),
-    totalamount: v.string(),
-    url: v.string(),
-  }),
+  transactions: v.array(
+    v.object({
+      cashierid: v.number(),
+      totalamount: v.string(),
+      url: v.string(),
+    })
+  ),
   sessionId: v.string(),
 });
 export type Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult = v.InferOutput<
