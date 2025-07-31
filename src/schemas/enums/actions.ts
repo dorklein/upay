@@ -7,6 +7,10 @@ import {
   Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters,
   Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult,
 } from "../REDIRECTSETMYCREDITCARDDETAILS";
+import {
+  Upay_DEPOSITCREDITCARDTRANSFER_parameters,
+  Upay_DEPOSITCREDITCARDTRANSFER_successResult,
+} from "../DEPOSITCREDITCARDTRANSFER";
 
 const clientActions = {
   INTERFACES: [
@@ -454,6 +458,7 @@ export type MinorAction = v.InferOutput<typeof MinorAction>;
 type Parameters = {
   REDIRECTDEPOSITCREDITCARDTRANSFER: Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters;
   REDIRECTSETMYCREDITCARDDETAILS: Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters;
+  DEPOSITCREDITCARDTRANSFER: Upay_DEPOSITCREDITCARDTRANSFER_parameters;
   [key: string]: unknown;
 };
 export type ParameterByMinor<T extends MinorAction> = T extends MinorAction
@@ -463,6 +468,7 @@ export type ParameterByMinor<T extends MinorAction> = T extends MinorAction
 type SuccessResults = {
   REDIRECTDEPOSITCREDITCARDTRANSFER: Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult;
   REDIRECTSETMYCREDITCARDDETAILS: Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult;
+  DEPOSITCREDITCARDTRANSFER: Upay_DEPOSITCREDITCARDTRANSFER_successResult;
   [key: string]: unknown;
 };
 export type SuccessResultByMinor<T extends MinorAction> = T extends MinorAction

@@ -9,6 +9,14 @@ import {
 } from "../schemas/enums";
 import type { ApiResponse, MultiApiResponse } from "../schemas/response";
 import { getUpayApiBaseUrl } from "../constants";
+import {
+  Upay_DEPOSITCREDITCARDTRANSFER_parameters,
+  Upay_DEPOSITCREDITCARDTRANSFER_successResult,
+  Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters,
+  Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult,
+  Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters,
+  Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult,
+} from "../schemas";
 
 interface ApiConfig {
   baseUrl: string;
@@ -231,6 +239,63 @@ export class ApiClient {
         return new Error(String(error));
       }
     ).map((data) => data);
+  }
+
+  /**
+   * Get a redirect url for a credit card transfer
+   */
+  async REDIRECTDEPOSITCREDITCARDTRANSFER(
+    loginData: LoginData,
+    parameters: Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters,
+    numberTemplate?: string
+  ): Promise<Result<ApiResponse<Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult>, Error>> {
+    return await this.executeWithLogin(
+      loginData,
+      createRequest({
+        mainaction: "CASHIER",
+        minoraction: "REDIRECTDEPOSITCREDITCARDTRANSFER",
+        parameters,
+        numberTemplate,
+      })
+    );
+  }
+
+  /**
+   * Charge a credit card with a credit card key (token)
+   */
+  async DEPOSITCREDITCARDTRANSFER(
+    loginData: LoginData,
+    parameters: Upay_DEPOSITCREDITCARDTRANSFER_parameters,
+    numberTemplate?: string
+  ): Promise<Result<ApiResponse<Upay_DEPOSITCREDITCARDTRANSFER_successResult>, Error>> {
+    return await this.executeWithLogin(
+      loginData,
+      createRequest({
+        mainaction: "CASHIER",
+        minoraction: "DEPOSITCREDITCARDTRANSFER",
+        parameters,
+        numberTemplate,
+      })
+    );
+  }
+
+  /**
+   * Get a redirect url for saving credit card details and token without charging the card
+   */
+  async REDIRECTSETMYCREDITCARDDETAILS(
+    loginData: LoginData,
+    parameters: Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters,
+    numberTemplate?: string
+  ): Promise<Result<ApiResponse<Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult>, Error>> {
+    return await this.executeWithLogin(
+      loginData,
+      createRequest({
+        mainaction: "ACCOUNTSECURE",
+        minoraction: "REDIRECTSETMYCREDITCARDDETAILS",
+        parameters,
+        numberTemplate,
+      })
+    );
   }
 }
 

@@ -6,6 +6,7 @@ import * as v from "@valibot/valibot";
 
 export const UpayTransfer = v.object({
   email: v.optional(v.pipe(v.string(), v.email())),
+  emailnotify: v.optional(v.pipe(v.string(), v.email())),
   productdescription: v.optional(v.string()),
   cellphonenotify: v.optional(v.string()),
   comment: v.optional(v.string()),
@@ -13,8 +14,10 @@ export const UpayTransfer = v.object({
   amount: v.optional(v.number()),
   numberpayments: v.optional(v.number()),
   ipnurl: v.optional(v.pipe(v.string(), v.url())),
+  returnurl: v.optional(v.pipe(v.string(), v.url())),
   directdebit: v.optional(NumberBoolean),
   currency: v.optional(UpayCurrency),
+  paymentdate: v.optional(v.string()),
 });
 export type UpayTransfer = v.InferOutput<typeof UpayTransfer>;
 
