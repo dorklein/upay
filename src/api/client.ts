@@ -1,7 +1,12 @@
-import { ResultAsync } from "neverthrow";
+import { err, ok, Result, ResultAsync } from "neverthrow";
 import type { HeaderSchema } from "../schemas/header";
-import { createRequest, type RequestInterface } from "../schemas/request";
-import { type ActionsByMain, type MainAction, isClientSecureAction } from "../schemas/enums";
+import { createRequest, LoginData, type RequestInterface } from "../schemas/request";
+import {
+  type ActionsByMain,
+  type MainAction,
+  SuccessResultByMinor,
+  isClientSecureAction,
+} from "../schemas/enums";
 import type { ApiResponse, MultiApiResponse } from "../schemas/response";
 import { getUpayApiBaseUrl } from "../constants";
 
@@ -106,6 +111,36 @@ export class ApiClient {
       }
       return data;
     });
+  }
+
+  async executeWithLogin<M extends MainAction, A extends ActionsByMain<M>>(
+    loginData: LoginData,
+    { mainaction, minoraction, encoding, numberTemplate, parameters }: RequestInterface<M, A>
+  ): Promise<Result<ApiResponse<SuccessResultByMinor<A>>, Error>> {
+    const request: RequestInterface = {
+      mainaction,
+      minoraction,
+      encoding,
+      ...(numberTemplate && { numberTemplate }),
+      parameters: parameters ?? {},
+    };
+
+    const result = await this.executeMultiple([
+      {
+        mainaction: "CONNECTION",
+        minoraction: "LOGIN",
+        encoding: "json",
+        parameters: loginData,
+      },
+      request,
+    ]);
+
+    if (result.isErr()) {
+      return err(result.error);
+    }
+
+    // todo - implement proper type checking
+    return ok(result.value.results[1] as ApiResponse<SuccessResultByMinor<A>>);
   }
 
   private sendRequest<P extends object>(

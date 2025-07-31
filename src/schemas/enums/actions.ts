@@ -1,6 +1,12 @@
 import * as v from "@valibot/valibot";
-import { Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters } from "../REDIRECTDEPOSITCREDITCARDTRANSFER";
-import { Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters } from "../REDIRECTSETMYCREDITCARDDETAILS";
+import {
+  Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters,
+  Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult,
+} from "../REDIRECTDEPOSITCREDITCARDTRANSFER";
+import {
+  Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters,
+  Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult,
+} from "../REDIRECTSETMYCREDITCARDDETAILS";
 
 const clientActions = {
   INTERFACES: [
@@ -452,4 +458,13 @@ type Parameters = {
 };
 export type ParameterByMinor<T extends MinorAction> = T extends MinorAction
   ? Parameters[T]
+  : Record<string, unknown>;
+
+type SuccessResults = {
+  REDIRECTDEPOSITCREDITCARDTRANSFER: Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult;
+  REDIRECTSETMYCREDITCARDDETAILS: Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult;
+  [key: string]: unknown;
+};
+export type SuccessResultByMinor<T extends MinorAction> = T extends MinorAction
+  ? SuccessResults[T]
   : Record<string, unknown>;

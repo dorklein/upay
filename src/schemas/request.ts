@@ -1,5 +1,14 @@
 import { ActionsByMain, MainAction, ParameterByMinor } from "./enums";
 
+export type LoginWithPassword = {
+  email: string;
+  passwordmd5: string;
+};
+export type LoginWithKey = {
+  key: string;
+};
+export type LoginData = LoginWithPassword | LoginWithKey;
+
 export type RequestInterface<
   Main extends MainAction = MainAction,
   Minor extends ActionsByMain<Main> = ActionsByMain<Main>,
