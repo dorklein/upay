@@ -1,4 +1,5 @@
 export * from "./ipn";
+export * from "./FULLCREATEACCOUNT";
 export * from "./DEPOSITCREDITCARDTRANSFER";
 export * from "./REDIRECTDEPOSITCREDITCARDTRANSFER";
 export * from "./REDIRECTSETMYCREDITCARDDETAILS";
