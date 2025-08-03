@@ -17,6 +17,10 @@ import {
   Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters,
   Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult,
 } from "../schemas";
+import {
+  Upay_FULLCREATEACCOUNT_parameters,
+  Upay_FULLCREATEACCOUNT_successResult,
+} from "../schemas/FULLCREATEACCOUNT";
 
 interface ApiConfig {
   baseUrl: string;
@@ -99,7 +103,7 @@ export class ApiClient {
     encoding,
     numberTemplate,
     parameters,
-  }: RequestInterface<M, A>): ResultAsync<ApiResponse, Error> {
+  }: RequestInterface<M, A>): ResultAsync<ApiResponse<SuccessResultByMinor<A>>, Error> {
     const request: RequestInterface & { parameters: object } = {
       mainaction,
       minoraction,
@@ -117,7 +121,7 @@ export class ApiClient {
       if (data.result?.sessionId) {
         this.mainSessionId = data.result.sessionId;
       }
-      return data;
+      return data as ApiResponse<SuccessResultByMinor<A>>;
     });
   }
 
@@ -244,6 +248,20 @@ export class ApiClient {
       }
       return data;
     });
+  }
+
+  async FULLCREATEACCOUNT(
+    parameters: Upay_FULLCREATEACCOUNT_parameters,
+    numberTemplate?: string
+  ): Promise<Result<ApiResponse<Upay_FULLCREATEACCOUNT_successResult>, Error>> {
+    return await this.execute(
+      createRequest({
+        mainaction: "CONNECTION",
+        minoraction: "FULLCREATEACCOUNT",
+        parameters,
+        numberTemplate,
+      })
+    );
   }
 
   /**

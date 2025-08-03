@@ -11,6 +11,10 @@ import {
   Upay_DEPOSITCREDITCARDTRANSFER_parameters,
   Upay_DEPOSITCREDITCARDTRANSFER_successResult,
 } from "../DEPOSITCREDITCARDTRANSFER";
+import {
+  Upay_FULLCREATEACCOUNT_parameters,
+  Upay_FULLCREATEACCOUNT_successResult,
+} from "../FULLCREATEACCOUNT";
 
 const clientActions = {
   INTERFACES: [
@@ -459,6 +463,7 @@ type Parameters = {
   REDIRECTDEPOSITCREDITCARDTRANSFER: Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_parameters;
   REDIRECTSETMYCREDITCARDDETAILS: Upay_REDIRECTSETMYCREDITCARDDETAILS_parameters;
   DEPOSITCREDITCARDTRANSFER: Upay_DEPOSITCREDITCARDTRANSFER_parameters;
+  FULLCREATEACCOUNT: Upay_FULLCREATEACCOUNT_parameters;
   [key: string]: unknown;
 };
 export type ParameterByMinor<T extends MinorAction> = T extends MinorAction
@@ -469,6 +474,7 @@ type SuccessResults = {
   REDIRECTDEPOSITCREDITCARDTRANSFER: Upay_REDIRECTDEPOSITCREDITCARDTRANSFER_successResult;
   REDIRECTSETMYCREDITCARDDETAILS: Upay_REDIRECTSETMYCREDITCARDDETAILS_successResult;
   DEPOSITCREDITCARDTRANSFER: Upay_DEPOSITCREDITCARDTRANSFER_successResult;
+  FULLCREATEACCOUNT: Upay_FULLCREATEACCOUNT_successResult;
   [key: string]: unknown;
 };
 export type SuccessResultByMinor<T extends MinorAction> = T extends MinorAction
