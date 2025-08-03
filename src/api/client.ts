@@ -238,7 +238,12 @@ export class ApiClient {
         }
         return new Error(String(error));
       }
-    ).map((data) => data);
+    ).map((data) => {
+      if (this.config.verbose && data) {
+        console.log(`[executeMultiple][data] ${JSON.stringify(data)}`);
+      }
+      return data;
+    });
   }
 
   /**
