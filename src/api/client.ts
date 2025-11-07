@@ -213,7 +213,8 @@ export class ApiClient {
       },
     }));
 
-    const url = this.getBaseUrl(isClientSecureAction(requests[0]?.mainaction));
+    const mainAction = requests[0]?.mainaction;
+    const url = this.getBaseUrl(mainAction ? isClientSecureAction(mainAction) : false);
     const urlEncodedData = new URLSearchParams();
     urlEncodedData.append("msgs", JSON.stringify(formattedRequests));
 
@@ -260,6 +261,25 @@ export class ApiClient {
         minoraction: "FULLCREATEACCOUNT",
         parameters,
         numberTemplate,
+      })
+    );
+  }
+
+  async GETKEY({
+    email,
+    passwordmd5,
+  }: {
+    email: string;
+    passwordmd5: string;
+  }): Promise<Result<ApiResponse<unknown>, Error>> {
+    return await this.execute(
+      createRequest({
+        mainaction: "CONNECTION",
+        minoraction: "LOGIN",
+        parameters: {
+          // email,
+          key: passwordmd5,
+        },
       })
     );
   }
